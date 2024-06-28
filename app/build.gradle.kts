@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.retrofit)
     implementation(libs.logging.interceptor)
-
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
