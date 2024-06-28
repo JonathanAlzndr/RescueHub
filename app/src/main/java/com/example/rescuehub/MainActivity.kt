@@ -31,5 +31,12 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        val sharedPref = getSharedPreferences("onboarding", MODE_PRIVATE)
+        val onboardingComplete = sharedPref.getBoolean("onboarding_complete", false)
+
+        if (!onboardingComplete) {
+            navController.navigate(R.id.onboardingFragment)
+        }
     }
 }

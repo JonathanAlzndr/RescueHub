@@ -18,6 +18,15 @@
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
+        android:id="@+id/onboardingFragment"
+        android:name="com.example.rescuehub.ui.unboarding.OnboardingFragment"
+        android:label="Onboarding">
+        <action
+            android:id="@+id/action_onboardingFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
+
+    <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.rescuehub.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
