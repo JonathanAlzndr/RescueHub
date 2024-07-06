@@ -15,4 +15,7 @@
     <string name="tv_onboard_3_desc">Aktifkan notifikasi untuk menerima\npemberitahuan real-time tentang\npermintaan bantuan baru di area Anda</string>
     <string name="tv_onboard_desc_3_2">Respons cepat Anda bisa membuat perbedaan</string>
     <string name="mulai">Mulai</string>
+    <string name="label_username">Masukan Username</string>
+    <string name="label_password">Masukan Password</string>
+    <string name="masuk">Masuk</string>
 </resources>
