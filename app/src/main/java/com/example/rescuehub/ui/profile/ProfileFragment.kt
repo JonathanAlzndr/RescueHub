@@ -1,5 +1,6 @@
 package com.example.rescuehub.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.rescuehub.databinding.FragmentProfileBinding
+import com.example.rescuehub.ui.upload.UploadActivity
 
 class ProfileFragment : Fragment() {
 
@@ -29,6 +31,13 @@ class ProfileFragment : Fragment() {
 
 
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.btnLogout.setOnClickListener {
+            startActivity(Intent(requireActivity(), UploadActivity::class.java))
+        }
     }
 
     override fun onDestroyView() {
