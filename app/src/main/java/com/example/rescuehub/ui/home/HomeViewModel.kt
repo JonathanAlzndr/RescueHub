@@ -7,7 +7,5 @@ import com.example.rescuehub.data.UserRepository
 import com.example.rescuehub.data.local.UserModel
 
 class HomeViewModel(private val userRepository: UserRepository) : ViewModel() {
-    fun getSession(): LiveData<UserModel> {
-        return userRepository.getSession().asLiveData()
-    }
+
 }

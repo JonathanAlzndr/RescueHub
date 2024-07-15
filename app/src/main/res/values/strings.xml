@@ -28,4 +28,5 @@
     <string name="mode_gelap">Mode Gelap</string>
     <string name="notifikasi">Notifikasi</string>
     <string name="keluar">Keluar</string>
+    <string name="selamat_datang_n_s">Selamat Datang\n%s</string>
 </resources>
