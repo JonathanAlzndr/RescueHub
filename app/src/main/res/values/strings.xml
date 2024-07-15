@@ -18,4 +18,14 @@
     <string name="label_username">Masukan Username</string>
     <string name="label_password">Masukan Password</string>
     <string name="masuk">Masuk</string>
+    <string name="kamera">Kamera</string>
+    <string name="deskripsi_penanganan">Deskripsi Penanganan</string>
+    <string name="kirim">kirim</string>
+    <string name="galeri">Galeri</string>
+    <string name="hubungi">Hubungi</string>
+    <string name="tanggapi">Tanggapi</string>
+    <string name="siap_membantu_hari_ini">Siap Membantu Hari Ini?</string>
+    <string name="mode_gelap">Mode Gelap</string>
+    <string name="notifikasi">Notifikasi</string>
+    <string name="keluar">Keluar</string>
 </resources>

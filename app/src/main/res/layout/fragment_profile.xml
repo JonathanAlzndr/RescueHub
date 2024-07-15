@@ -73,7 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Mode Gelap"
+                    android:text="@string/mode_gelap"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
@@ -97,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Notifikasi"
+                    android:text="@string/notifikasi"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
@@ -112,7 +112,7 @@
                 android:id="@+id/btn_logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Keluar"
+                android:text="@string/keluar"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/linear_2"
                 app:layout_constraintStart_toStartOf="@id/linear_2"

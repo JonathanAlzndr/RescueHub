@@ -1,13 +1,15 @@
 package com.example.rescuehub.ui.profile
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.rescuehub.data.UserRepository
+import kotlinx.coroutines.launch
 
-class ProfileViewModel : ViewModel() {
+class ProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
+    fun logout() {
+        viewModelScope.launch {
+            userRepository.logout()
+        }
     }
-    val text: LiveData<String> = _text
 }

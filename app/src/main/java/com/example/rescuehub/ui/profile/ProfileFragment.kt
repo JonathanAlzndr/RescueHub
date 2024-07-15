@@ -6,9 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.example.rescuehub.databinding.FragmentProfileBinding
-import com.example.rescuehub.ui.upload.UploadActivity
+import com.example.rescuehub.ui.factory.ViewModelFactory
+import com.example.rescuehub.ui.login.LoginActivity
 
 class ProfileFragment : Fragment() {
 
@@ -23,8 +24,6 @@ class ProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val profileViewModel =
-            ViewModelProvider(this).get(ProfileViewModel::class.java)
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -35,8 +34,17 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val factory = ViewModelFactory.getInstance(requireActivity())
+        val viewModel: ProfileViewModel by viewModels {
+            factory
+        }
+
         binding.btnLogout.setOnClickListener {
-            startActivity(Intent(requireActivity(), UploadActivity::class.java))
+            viewModel.logout()
+            val intent = Intent(requireActivity(), LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
     }
 

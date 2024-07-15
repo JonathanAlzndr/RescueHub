@@ -5,8 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.example.rescuehub.databinding.FragmentHomeBinding
+import com.example.rescuehub.ui.factory.ViewModelFactory
 
 class HomeFragment : Fragment() {
 
@@ -21,13 +22,29 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        val factory = ViewModelFactory.getInstance(requireActivity())
+        val viewModel: HomeViewModel by viewModels {
+            factory
+        }
+
+        /*viewModel.getSession().observe(requireActivity()) {
+            if (!it.isLogin && it.isFirstLaunch) {
+                // Jika tidak login dan pertama kali buka aplikasi
+                startActivity(Intent(requireActivity(), OnboardingActivity::class.java))
+            } else if(!it.isLogin && !it.isFirstLaunch) {
+                // Jika tidak login namun sudah membuka aplikasi
+                startActivity(Intent(requireActivity(), LoginActivity::class.java))
+            }
+        }*/
     }
 
     override fun onDestroyView() {
