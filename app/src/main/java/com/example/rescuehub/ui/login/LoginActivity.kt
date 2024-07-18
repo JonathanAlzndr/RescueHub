@@ -53,7 +53,8 @@ class LoginActivity : AppCompatActivity() {
                             showToast(it.data.message)
                             val session = UserModel(username, isFirstLaunch = false, isLogin = true)
                             viewModel.saveSession(session)
-                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                            startActivity(intent)
                         }
                     }
                 }

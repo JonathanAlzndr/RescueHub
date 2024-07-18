@@ -40,12 +40,26 @@ class ProfileFragment : Fragment() {
             factory
         }
 
+        viewModel.getSession().observe(viewLifecycleOwner) {
+            binding.tvUsername.text = it.username
+        }
+
+        viewModel.getThemeSetting().observe(viewLifecycleOwner) { isDarkModeActive: Boolean ->
+            binding.switchDarkMode.isChecked = isDarkModeActive
+        }
+
+        binding.switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.saveThemeSetting(isChecked)
+        }
+
+
         binding.btnLogout.setOnClickListener {
             viewModel.logout()
             val intent = Intent(requireActivity(), LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
+
     }
 
     override fun onDestroyView() {

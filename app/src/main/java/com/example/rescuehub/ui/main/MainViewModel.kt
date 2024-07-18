@@ -17,6 +17,8 @@ class MainViewModel(private val userRepository: UserRepository) : ViewModel() {
     private val _isFirstLaunch = MutableLiveData<Boolean>()
     val isFirstLaunch: LiveData<Boolean> = _isFirstLaunch
 
+    fun getThemeSetting() = userRepository.getThemeSetting().asLiveData()
+
     init {
         viewModelScope.launch {
             userRepository.getSession().collect { user ->

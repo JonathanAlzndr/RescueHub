@@ -54,6 +54,12 @@ class UserRepository private constructor(val apiService: ApiService, val pref: S
         pref.saveLaunchStatus(isFirstLaunch)
     }
 
+    fun getThemeSetting(): Flow<Boolean>  = pref.getThemeSetting()
+
+    suspend fun saveThemeSetting(isDarkMode: Boolean) {
+        pref.saveThemeSetting(isDarkMode)
+    }
+
     suspend fun logout() {
         pref.logout()
     }

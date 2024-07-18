@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.rescuehub.R
 import com.example.rescuehub.databinding.FragmentHomeBinding
 import com.example.rescuehub.ui.factory.ViewModelFactory
 
@@ -36,15 +37,12 @@ class HomeFragment : Fragment() {
             factory
         }
 
-        /*viewModel.getSession().observe(requireActivity()) {
-            if (!it.isLogin && it.isFirstLaunch) {
-                // Jika tidak login dan pertama kali buka aplikasi
-                startActivity(Intent(requireActivity(), OnboardingActivity::class.java))
-            } else if(!it.isLogin && !it.isFirstLaunch) {
-                // Jika tidak login namun sudah membuka aplikasi
-                startActivity(Intent(requireActivity(), LoginActivity::class.java))
-            }
-        }*/
+        viewModel.getSession().observe(viewLifecycleOwner) {
+            val username = it.username
+            binding.tvHelloUser.text = getString(R.string.selamat_datang_n_s, username)
+        }
+
+
     }
 
     override fun onDestroyView() {

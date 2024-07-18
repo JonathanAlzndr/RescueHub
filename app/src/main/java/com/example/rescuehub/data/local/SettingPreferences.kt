@@ -22,6 +22,18 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
         }
     }
 
+    suspend fun saveThemeSetting(isDarkMode: Boolean) {
+        dataStore.edit {
+            it[IS_DARK_MODE] = isDarkMode
+        }
+    }
+
+    fun getThemeSetting(): Flow<Boolean> {
+        return dataStore.data.map {
+            it[IS_DARK_MODE] ?: false
+        }
+    }
+
     fun getSession(): Flow<UserModel> {
         return dataStore.data.map {
             UserModel(
@@ -64,6 +76,7 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
         private val USERNAME = stringPreferencesKey("username")
         private val IS_LOGIN = booleanPreferencesKey("is_login")
         private val IS_FIRST_LAUNCH = booleanPreferencesKey("is_first_launch")
+        private val IS_DARK_MODE = booleanPreferencesKey("is_dark_mode")
         private const val TAG = "SettingPreferences"
     }
 }

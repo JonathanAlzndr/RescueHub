@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -63,6 +64,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        viewModel.getThemeSetting().observe(this) { isDarkModeActive ->
+            AppCompatDelegate.setDefaultNightMode(
+                if(isDarkModeActive) AppCompatDelegate.MODE_NIGHT_YES
+                else AppCompatDelegate.MODE_NIGHT_NO
+            )
+        }
+
     }
 
 
@@ -80,5 +88,6 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
+
 
 }
