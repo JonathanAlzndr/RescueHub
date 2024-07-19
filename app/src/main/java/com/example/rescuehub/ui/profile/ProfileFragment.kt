@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import com.example.rescuehub.databinding.FragmentProfileBinding
 import com.example.rescuehub.ui.factory.ViewModelFactory
 import com.example.rescuehub.ui.login.LoginActivity
+import com.example.rescuehub.ui.map.MapsActivity
 
 class ProfileFragment : Fragment() {
 
@@ -58,6 +59,10 @@ class ProfileFragment : Fragment() {
             val intent = Intent(requireActivity(), LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
+        }
+
+        binding.btnMap.setOnClickListener {
+            startActivity(Intent(requireActivity(), MapsActivity::class.java))
         }
 
     }
