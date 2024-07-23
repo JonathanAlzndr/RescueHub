@@ -8,6 +8,7 @@ import com.example.rescuehub.di.Injection
 import com.example.rescuehub.ui.home.HomeViewModel
 import com.example.rescuehub.ui.login.LoginViewModel
 import com.example.rescuehub.ui.main.MainViewModel
+import com.example.rescuehub.ui.map.MapActivityViewModel
 import com.example.rescuehub.ui.onboarding.OnboardingViewModel
 import com.example.rescuehub.ui.profile.ProfileViewModel
 
@@ -30,6 +31,9 @@ class ViewModelFactory private constructor(private val userRepository: UserRepos
         }
         if(modelClass.isAssignableFrom(OnboardingViewModel::class.java)) {
             return OnboardingViewModel(userRepository) as T
+        }
+        if(modelClass.isAssignableFrom(MapActivityViewModel::class.java)) {
+            return MapActivityViewModel(userRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

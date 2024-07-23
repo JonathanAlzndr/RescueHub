@@ -1,24 +1,32 @@
 package com.example.rescuehub.ui.map
 
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.rescuehub.R
 import com.example.rescuehub.databinding.ActivityMapsBinding
+import com.example.rescuehub.ui.factory.ViewModelFactory
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
-
+    private lateinit var userLocation: LatLng
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var mapsViewModel: MapActivityViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,6 +37,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        val factory = ViewModelFactory.getInstance(this)
+        mapsViewModel = ViewModelProvider(this, factory)[MapActivityViewModel::class.java]
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
     }
 
     /**
@@ -50,17 +64,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val latitude = intent.getDoubleExtra(EXTRA_LATITUDE, 0.0)
         val longitude = intent.getDoubleExtra(EXTRA_LONGITUDE, 0.0)
 
-        val location = LatLng(latitude, longitude)
+        val destinationLocation = LatLng(latitude, longitude)
         mMap.addMarker(
             MarkerOptions()
-                .position(location)
+                .position(destinationLocation)
                 .title("Marker")
-                .snippet("Test")
+                .snippet("Orang yang membutuhkan bantuan")
         )
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(destinationLocation, 15f))
 
-
-        getMyLocation()
+        getMyLocation(destinationLocation)
     }
 
     private val requestPermissionLauncher =
@@ -68,21 +81,40 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
-                getMyLocation()
+                getMyLocation(null)
             }
         }
 
-    private fun getMyLocation() {
+    private fun getMyLocation(destinationLocation: LatLng?) {
         if (ContextCompat.checkSelfPermission(
                 this.applicationContext,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            mMap.isMyLocationEnabled = true
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                location?.let {
+                    val userLocation = LatLng(it.latitude, it.longitude)
+                    if (destinationLocation != null) {
+                        val origin = "${userLocation.latitude},${userLocation.longitude}"
+                        val dest = "${destinationLocation.latitude},${destinationLocation.longitude}"
+                        mapsViewModel.getDirection(origin, dest).observe(this) { polyline ->
+                            polyline?.let {
+                                mMap.addPolyline(
+                                    PolylineOptions()
+                                        .addAll(it)
+                                        .width(10f)
+                                        .color(ContextCompat.getColor(this, R.color.purple_500))
+                                )
+                            }
+                        }
+                    }
+                }
+            }
         } else {
             requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
+
 
     companion object {
         const val EXTRA_LATITUDE = "extra_lat"

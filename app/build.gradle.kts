@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.activity)
     implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     implementation(libs.retrofit2.converter.gson)
     implementation(libs.retrofit)
