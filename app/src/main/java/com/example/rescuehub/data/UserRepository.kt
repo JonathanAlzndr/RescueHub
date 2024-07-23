@@ -1,18 +1,22 @@
 package com.example.rescuehub.data
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.rescuehub.data.local.RescueCase
 import com.example.rescuehub.data.local.SettingPreferences
 import com.example.rescuehub.data.local.UserModel
 import com.example.rescuehub.data.remote.api.ApiService
 import com.example.rescuehub.data.remote.model.UserLogin
 import com.example.rescuehub.data.remote.response.LoginResponse
 import com.example.rescuehub.utils.Result
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 
 class UserRepository private constructor(val apiService: ApiService, val pref: SettingPreferences) {
 
@@ -54,7 +58,7 @@ class UserRepository private constructor(val apiService: ApiService, val pref: S
         pref.saveLaunchStatus(isFirstLaunch)
     }
 
-    fun getThemeSetting(): Flow<Boolean>  = pref.getThemeSetting()
+    fun getThemeSetting(): Flow<Boolean> = pref.getThemeSetting()
 
     suspend fun saveThemeSetting(isDarkMode: Boolean) {
         pref.saveThemeSetting(isDarkMode)
@@ -63,6 +67,24 @@ class UserRepository private constructor(val apiService: ApiService, val pref: S
     suspend fun logout() {
         pref.logout()
     }
+
+    fun getRescueCases(context: Context): List<RescueCase> {
+        val jsonString = readJsonFromAssets(context, "data.json")
+        jsonString?.let {
+            val gson = Gson()
+            return gson.fromJson(it, Array<RescueCase>::class.java).toList()
+        } ?: return emptyList()
+    }
+
+    private fun readJsonFromAssets(context: Context, fileName: String): String? {
+        return try {
+            context.assets.open(fileName).bufferedReader().use { it.readText() }
+        } catch (ioException: IOException) {
+            ioException.printStackTrace()
+            null
+        }
+    }
+
 
     companion object {
         @Volatile

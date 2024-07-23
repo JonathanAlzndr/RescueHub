@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rescuehub.R
 import com.example.rescuehub.databinding.FragmentHomeBinding
+import com.example.rescuehub.ui.adapter.RescueCaseAdapter
 import com.example.rescuehub.ui.factory.ViewModelFactory
 
 class HomeFragment : Fragment() {
@@ -36,11 +38,23 @@ class HomeFragment : Fragment() {
         val viewModel: HomeViewModel by viewModels {
             factory
         }
+        val rvMain = binding.rvMain
+        val adapter = RescueCaseAdapter()
+        rvMain.adapter = adapter
+        rvMain.layoutManager = LinearLayoutManager(requireActivity())
 
+        viewModel.rescueCases.observe(requireActivity()) { cases ->
+            adapter.submitList(cases)
+        }
+
+
+        viewModel.loadRescueCases(requireActivity())
+        
         viewModel.getSession().observe(viewLifecycleOwner) {
             val username = it.username
             binding.tvHelloUser.text = getString(R.string.selamat_datang_n_s, username)
         }
+
 
 
     }

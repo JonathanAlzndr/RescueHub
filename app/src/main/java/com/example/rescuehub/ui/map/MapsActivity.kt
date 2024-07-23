@@ -1,7 +1,10 @@
 package com.example.rescuehub.ui.map
 
+import android.content.pm.PackageManager
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.rescuehub.R
 import com.example.rescuehub.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -40,9 +43,49 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        mMap.uiSettings.isZoomControlsEnabled = true
+        mMap.uiSettings.isCompassEnabled = true
+        mMap.uiSettings.isMapToolbarEnabled = true
+
+        val latitude = intent.getDoubleExtra(EXTRA_LATITUDE, 0.0)
+        val longitude = intent.getDoubleExtra(EXTRA_LONGITUDE, 0.0)
+
+        val location = LatLng(latitude, longitude)
+        mMap.addMarker(
+            MarkerOptions()
+                .position(location)
+                .title("Marker")
+                .snippet("Test")
+        )
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
+
+
+        getMyLocation()
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                getMyLocation()
+            }
+        }
+
+    private fun getMyLocation() {
+        if (ContextCompat.checkSelfPermission(
+                this.applicationContext,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            mMap.isMyLocationEnabled = true
+        } else {
+            requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+
+    companion object {
+        const val EXTRA_LATITUDE = "extra_lat"
+        const val EXTRA_LONGITUDE = "extra_long"
     }
 }
