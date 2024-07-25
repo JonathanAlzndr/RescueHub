@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.example.rescuehub.data.local.RescueCase
 import com.example.rescuehub.data.local.SettingPreferences
 import com.example.rescuehub.data.local.UserModel
@@ -11,14 +12,21 @@ import com.example.rescuehub.data.remote.api.ApiService
 import com.example.rescuehub.data.remote.api.DirectionApiService
 import com.example.rescuehub.data.remote.model.UserLogin
 import com.example.rescuehub.data.remote.response.DirectionsResponse
+import com.example.rescuehub.data.remote.response.FileUploadResponse
 import com.example.rescuehub.data.remote.response.LoginResponse
 import com.example.rescuehub.utils.Result
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.File
 import java.io.IOException
 
 class UserRepository private constructor(
@@ -98,19 +106,19 @@ class UserRepository private constructor(
             origin,
             destination,
             "AIzaSyBdVslfNQKJIhh9mjh46wjFFG19keKLL-4"
-        ).enqueue(object: Callback<DirectionsResponse> {
+        ).enqueue(object : Callback<DirectionsResponse> {
             override fun onResponse(
                 p0: Call<DirectionsResponse>,
                 p1: Response<DirectionsResponse>
             ) {
-                if(p1.isSuccessful) {
+                if (p1.isSuccessful) {
                     val polylineEncoded = p1.body()?.routes?.firstOrNull()?.overviewPolyline?.points
                     result.value = polylineEncoded?.let { decodePolyLine(it) }
                 }
             }
 
             override fun onFailure(p0: Call<DirectionsResponse>, p1: Throwable) {
-                Log.e(TAG, "onFailure: ${p1.message}", )
+                Log.e(TAG, "onFailure: ${p1.message}")
             }
 
         })
@@ -149,6 +157,24 @@ class UserRepository private constructor(
         return poly
     }
 
+    fun uploadImage(imageFile: File, description: String) = liveData {
+        emit(Result.Loading)
+        val requestBody = description.toRequestBody("text/plain".toMediaType())
+        val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+        val multipartBody = MultipartBody.Part.createFormData(
+            "photo",
+            imageFile.name,
+            requestImageFile
+        )
+        try {
+            val successResponse = apiService.uploadImage(multipartBody, requestBody)
+            emit(Result.Success(successResponse))
+        } catch(e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, FileUploadResponse::class.java)
+            emit(Result.Error(errorResponse.message))
+        }
+    }
 
     companion object {
         @Volatile

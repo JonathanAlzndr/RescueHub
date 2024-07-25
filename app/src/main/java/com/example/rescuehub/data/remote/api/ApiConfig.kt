@@ -10,7 +10,8 @@ object ApiConfig {
         val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val client = OkHttpClient.Builder().addInterceptor(loggingInterceptor)
             .build()
-        val retrofit = Retrofit.Builder().baseUrl("https://cf9932e2-e3f8-4d53-a016-35e2d13712bb.mock.pstmn.io/")
+        //https://cf9932e2-e3f8-4d53-a016-35e2d13712bb.mock.pstmn.io/
+        val retrofit = Retrofit.Builder().baseUrl("https://story-api.dicoding.dev/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

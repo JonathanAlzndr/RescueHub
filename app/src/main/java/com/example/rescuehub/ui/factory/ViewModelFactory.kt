@@ -11,6 +11,7 @@ import com.example.rescuehub.ui.main.MainViewModel
 import com.example.rescuehub.ui.map.MapActivityViewModel
 import com.example.rescuehub.ui.onboarding.OnboardingViewModel
 import com.example.rescuehub.ui.profile.ProfileViewModel
+import com.example.rescuehub.ui.upload.UploadViewModel
 
 class ViewModelFactory private constructor(private val userRepository: UserRepository) :
     ViewModelProvider.NewInstanceFactory() {
@@ -34,6 +35,9 @@ class ViewModelFactory private constructor(private val userRepository: UserRepos
         }
         if(modelClass.isAssignableFrom(MapActivityViewModel::class.java)) {
             return MapActivityViewModel(userRepository) as T
+        }
+        if(modelClass.isAssignableFrom(UploadViewModel::class.java)) {
+            return UploadViewModel(userRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }
