@@ -8,5 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="pink">#FF8080</color>
+    <color name="bubblegum_pink">#FF90BC</color>
+    <color name="blush_pink">#FFC0D9</color>
+    <color name="soft_ivory">#F9F9E0</color>
+    <color name="seafom_blue">#8ACDD7</color>
     <color name="gray">#EFF1F2</color>
 </resources>

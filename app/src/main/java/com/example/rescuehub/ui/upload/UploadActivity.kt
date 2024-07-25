@@ -63,6 +63,9 @@ class UploadActivity : AppCompatActivity() {
         val factory = ViewModelFactory.getInstance(this)
         viewModel = ViewModelProvider(this, factory)[UploadViewModel::class.java]
 
+
+        binding.progressBar.visibility = View.INVISIBLE
+
         binding.btnGallery.setOnClickListener {
             startGallery()
         }
@@ -120,7 +123,6 @@ class UploadActivity : AppCompatActivity() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
-
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }

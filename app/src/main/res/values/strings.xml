@@ -30,4 +30,5 @@
     <string name="keluar">Keluar</string>
     <string name="selamat_datang_n_s">Selamat Datang\n%s</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="selesaikan_bantuan">Selesaikan Bantuan</string>
 </resources>
